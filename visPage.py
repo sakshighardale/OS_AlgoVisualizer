@@ -93,18 +93,18 @@ class PageReplacementVisualization:
                 empty_index = self.memory_fifo.index(-1)
                 self.memory_fifo[empty_index] = page
             else:  # If no empty frame, replace the first page (FIFO logic)
-                self.memory_fifo.pop(0)  # Remove the oldest page
-                self.memory_fifo.append(page)  # Add new page
+                self.memory_fifo.pop(0)  
+                self.memory_fifo.append(page)  
 
     def lru_step(self):
         """LRU page replacement step"""
         page = self.page_references[self.current_step]
         if page not in self.memory_lru:
             self.page_faults_lru += 1
-            if -1 in self.memory_lru:  # If there's an empty frame
+            if -1 in self.memory_lru: 
                 empty_index = self.memory_lru.index(-1)
                 self.memory_lru[empty_index] = page
-            else:  # If no empty frame, replace the least recently used page
+            else: 
                 last_used = self.memory_lru.index(min(self.memory_lru, key=lambda x: self.page_references.index(x)))
                 self.memory_lru[last_used] = page
 
@@ -113,10 +113,10 @@ class PageReplacementVisualization:
         page = self.page_references[self.current_step]
         if page not in self.memory_opt:
             self.page_faults_opt += 1
-            if -1 in self.memory_opt:  # If there's an empty frame
+            if -1 in self.memory_opt: 
                 empty_index = self.memory_opt.index(-1)
                 self.memory_opt[empty_index] = page
-            else:  # If no empty frame, replace the page that will be used farthest in the future
+            else:  
                 future_use = [self.page_references[self.current_step + 1:].index(p) if p in self.page_references[self.current_step + 1:] else float('inf') for p in self.memory_opt]
                 farthest_page = future_use.index(max(future_use))
                 self.memory_opt[farthest_page] = page
